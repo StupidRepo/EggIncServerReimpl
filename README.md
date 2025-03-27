@@ -59,7 +59,7 @@ Events are in this format, in the `events` DB collection:
   // mongo's _id has no effect on the event ID. you need to specify the event ID in 'identifier'
   "identifier": "event-3-27",
   "seconds_remaining": 0, // leave this blank, it'll be filled automatically
-  "type": "hab-sale", // unsure what other types there are
+  "type": "hab-sale", // see below for possible values
   "multiplier": 0.2, // 1 - 0.2 = 0.8 = 80%
   "subtitle": "80% OFF HEN HOUSES!",
   "start_time": 1743091200,
@@ -68,4 +68,24 @@ Events are in this format, in the `events` DB collection:
 }
 ```
 
-They will be automatically deleted when `/ei/get_periodicals` is called and the event's seconds_remaining is 0.
+They will be automatically deleted the next time `/ei/get_periodicals` is called and the event's seconds_remaining is 0.
+### Sale event types
+The lower the multiplier, the higher the discount. For example, a 0.2 multiplier means 80% off. A 0.6 multiplier means 40% off.
+- `boost-sale`
+- `crafting-sale`
+- `epic-research-sale`
+- `research-sale`
+- `shell-sale`
+- `vehicle-sale`
+### Boost event types
+These are generic boost events. The multiplier is the boost multiplier. For example, a 2.0 multiplier means a 2x boost.
+- `drone-boost`
+- `earnings-boost`
+- `gift-boost`
+- `piggy-boost`
+- `piggy-cap-boost`
+- `prestige-boost`
+- `mission-capacity`
+- `mission-fuel`
+- `boost-duration`
+- `mission-duration`
