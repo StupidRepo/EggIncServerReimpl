@@ -1,5 +1,5 @@
 # Hashing
-## `AuthenticatedMessages`
+## `AuthenticatedMessage`s
 Make a `hash.py` with this function:
 - `hash_v1(data: bytes) -> hex string of hash`
 ## Contracts 'n' stuff
