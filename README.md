@@ -1,6 +1,11 @@
 # NeoInc
 An Egg, Inc. server re-implementation, made in Python.
 
+> [!WARNING]
+> This is a fan project and is not intended to be used for cheating or hacking on official Egg, Inc. servers in any way.
+> It is intended to be used for educational purposes and for fun.
+> Switching from a NeoInc server to Egg, Inc. servers to save backups will not work. Do not try to get around this security measure.
+
 ## Implementation Status
 For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
 
@@ -26,6 +31,10 @@ For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
   - [ ] Gifting
 
 ## Usage
+> [!WARNING]
+> To prevent abuse, the hashing algorithm has been .gitignore'd from this repository.
+> To see what you have to make to get this project to run, see the [README.md](/utils/README.md) in `utils/README.md`.
+
 ### Running the server
 1. Clone the repository
 2. Install the required dependencies with `pip` (`pip install Flask protobuf`)
