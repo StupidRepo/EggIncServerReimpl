@@ -1,0 +1,9 @@
+*.http
+*.bin
+test.py
+.venv
+.idea
+__pycache__
+.db
+.env
+hash.py
