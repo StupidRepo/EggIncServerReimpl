@@ -1,10 +1,10 @@
 # Endpoint Progress
-## `ei/`
+## `ei/` - Core
 ### Done
 - [x] ei/first_contact_secure
+- [x] ei/save_backup_secure
 - [x] ei/get_config
 - [x] ei/get_periodicals
-- [x] ei/save_backup_secure
 ### TODO
 - [ ] ei/auto_join_coop
 - [ ] ei/clean_accounts
@@ -39,25 +39,26 @@
 - [ ] ei/update_coop_status_secure
 - [ ] ei/user_data_info
 
-## `ei_afx/`
+## `ei_afx/` - Artifacts
 ### Done
-None.
+- [x] ei_afx/config
+- [x] ei_afx/get_active_missions
+- [x] ei_afx/launch_mission
 ### TODO
-- [ ] ei_afx/authenticate_artifact
-- [ ] ei_afx/collect_contract_artifacts
-- [ ] ei_afx/collect_season_artifacts
-- [ ] ei_afx/complete_mission
-- [ ] ei_afx/config
-- [ ] ei_afx/consume_artifact
-- [ ] ei_afx/craft_artifact
-- [ ] ei_afx/demote_artifact
-- [ ] ei_afx/get_active_missions
-- [ ] ei_afx/launch_mission
-- [ ] ei_afx/set_artifact
-- [ ] ei_afx/sync_mission
-- [ ] ei_afx/zoom_zoom
+None.
+### PR only
+- [ ] ~~ei_afx/authenticate_artifact~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/collect_contract_artifacts~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/collect_season_artifacts~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/complete_mission~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/consume_artifact~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/craft_artifact~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/demote_artifact~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/set_artifact~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/sync_mission~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/zoom_zoom~~ **(DIY and PR it in)**
 
-## `ei_ctx/`
+## `ei_ctx/` - Contracts
 ### Done
 None.
 ### TODO
@@ -71,10 +72,9 @@ None.
 - [ ] ei_ctx/get_season_infos_v2
 - [ ] ei_ctx/mark_evaluation_read
 
-## `ei_srv/`
+## `ei_srv/` - Subscriptions
 ### Done
-None.
+- [x] ei_srv/subscription_status/<user_id>
 ### TODO
 - [ ] ei_srv/initialize_subscription
 - [ ] ei_srv/sub_change_hint
-- [ ] ei_srv/subscription_status

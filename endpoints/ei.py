@@ -1,40 +1,43 @@
 import base64
 import time
-
 from flask import Blueprint, g
+import db
 from pb import ei_pb2
 from utils import common, gen
 
 ei_bp = Blueprint('ei', __name__)
 
 """
-Create's the user's account if it doesn't exist, and returns the user's backup data if it exists.
+Creates the user's account if it doesn't exist, and returns the user's backup data if it exists.
 """
 @ei_bp.route('/first_contact_secure', methods=['POST'])
 @common.proto_parser(ei_pb2.EggIncFirstContactRequest, True)
 def first_contact_secure(msg: ei_pb2.EggIncFirstContactRequest):
-	neoid = common.did_to_nid(msg.device_id)
+	neo_id = common.did_to_nid(msg.device_id)
 
 	response = ei_pb2.EggIncFirstContactResponse()
-	response.ei_user_id = neoid
+	response.ei_user_id = neo_id
 
-	# check if account is in DB, if not, create  it
-	user: dict = g.db.users.find_one({"_id": neoid})
+	# check if account is in DB
+	try:
+		user = db.DBUser(neo_id, db.client)
+	except Exception as e:
+		print(f"Error getting user {neo_id}: {e}")
+		user = None
+
+	# if user is None, create a new account
 	if user is None:
-		print(f"User {neoid} not found, creating new user")
+		print(f"Creating new user")
 
-		g.db.users.insert_one({"_id": neoid, "device_id": msg.device_id})
+		db.client.users_collection.insert_one({"_id": neo_id, "device_id": msg.device_id})
 		response.ids_transferred.append(msg.device_id)
 	else:
-		prev_backup = user.get("backup")
+		prev_backup = user.get_backup()
 		if prev_backup is not None:
 			print("Backup found!")
-			backup_msg = ei_pb2.Backup()
-			backup_msg.ParseFromString(prev_backup)
-
-			response.backup.CopyFrom(backup_msg)
+			response.backup.CopyFrom(prev_backup)
 		else:
-			print("No backup found")
+			print("No backup found for user.")
 
 	return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
@@ -49,44 +52,44 @@ def save_backup_secure(msg: ei_pb2.Backup):
 	response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.USER_NOT_FOUND
 
 	# if a backup exists, check for conflicts
-	user: dict = g.db.users.find_one({"_id": msg.ei_user_id})
+	try:
+		user = db.DBUser(msg.ei_user_id, db.client)
+	except Exception as e:
+		print(f"Error getting user {msg.user_id}: {e}")
+		user = None
+
 	if user is None:
 		return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
-	print("User found!")
-	prev_backup = user.get("backup")
-
+	prev_backup = user.get_backup()
 	if not msg.force_backup and prev_backup is not None:
-		db_backup = ei_pb2.Backup()
-		db_backup.ParseFromString(prev_backup)
-
-		response.existing_backup.CopyFrom(db_backup)
-		if sum(msg.stats.egg_totals) < sum(db_backup.stats.egg_totals): # acts as a db_backup.game.lifetime_earnings replacement as I think that is done on server then appended to the backup, but I'm not sure, so I'm doing this instead lol
+		response.existing_backup.CopyFrom(prev_backup)
+		if sum(msg.stats.egg_totals) < sum(prev_backup.stats.egg_totals): # acts as a Backup.game.lifetime_earnings replacement as I think that is done on server then appended to the backup, but I'm not sure, so I'm doing this instead lol
 			response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.COULD_NOT_OVERWRITE
 			response.message = "Remote backup has greater lifetime earnings."
 			return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
-		elif msg.game.soul_eggs < db_backup.game.soul_eggs:
+		elif msg.game.soul_eggs < prev_backup.game.soul_eggs:
 			response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.COULD_NOT_OVERWRITE
 			response.message = "Remote backup has more soul eggs."
 			return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
-		elif msg.game.eggs_of_prophecy < db_backup.game.eggs_of_prophecy:
+		elif msg.game.eggs_of_prophecy < prev_backup.game.eggs_of_prophecy:
 			response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.COULD_NOT_OVERWRITE
 			response.message = "Remote backup has more eggs of prophecy."
 			return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
-		elif msg.game.golden_eggs_earned < db_backup.game.golden_eggs_earned:
+		elif msg.game.golden_eggs_earned < prev_backup.game.golden_eggs_earned:
 			response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.COULD_NOT_OVERWRITE
 			response.message = "Remote backup has more golden eggs."
 			return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
-		elif msg.artifacts.crafting_xp < db_backup.artifacts.crafting_xp:
+		elif msg.artifacts.crafting_xp < prev_backup.artifacts.crafting_xp:
 			response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.COULD_NOT_OVERWRITE
 			response.message = "Remote backup has more Artifact Crafting XP."
 			return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
-		elif msg.artifacts.inventory_score < db_backup.artifacts.inventory_score:
+		elif msg.artifacts.inventory_score < prev_backup.artifacts.inventory_score:
 			response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.COULD_NOT_OVERWRITE
 			response.message = "Remote backup has a better Artifact Inventory."
 			return base64.b64encode(common.make_auth_message(response).SerializeToString())
@@ -96,7 +99,7 @@ def save_backup_secure(msg: ei_pb2.Backup):
 	response.error_code = ei_pb2.SaveBackupResponse.ErrorCodes.NO_ERROR
 	response.existing_backup.Clear()
 
-	g.db.users.update_one({"_id": msg.ei_user_id}, {"$set": {"backup": msg.SerializeToString()}})
+	user.update_backup(msg)
 	print(f"Backup for {msg.ei_user_id} saved!")
 
 	return base64.b64encode(common.make_auth_message(response).SerializeToString())
@@ -106,7 +109,8 @@ Get Egg, Inc. configuration data, such as a boost's golden egg cost, min soul eg
 """
 @ei_bp.route('/get_config', methods=['POST'])
 @common.proto_parser(ei_pb2.ConfigRequest)
-def get_config(_: ei_pb2.ConfigRequest):
+def get_config(msg: ei_pb2.ConfigRequest):
+	user = db.DBUser(msg.rinfo.ei_user_id, db.client) # we want to error if the user doesn't exist, so no try/except here
 	response = ei_pb2.ConfigResponse()
 
 	response.live_config.CopyFrom(gen.make_liveconfig())
@@ -130,7 +134,7 @@ Get the list of time-based things such as events, contracts, etc.
 def get_periodicals(_: ei_pb2.GetPeriodicalsRequest):
 	response = ei_pb2.PeriodicalsResponse()
 
-	events: list[dict] = g.db.events.find()
+	events: list[dict] = db.client.events_collection.find()
 	for event_db in events:
 		event_msg = ei_pb2.EggIncEvent()
 		common.json_to_protobuf(event_db, event_msg)
@@ -140,12 +144,27 @@ def get_periodicals(_: ei_pb2.GetPeriodicalsRequest):
 
 		if event_msg.seconds_remaining == 0:
 			print(f"Event {event_msg.identifier} has ended, deleting.")
-			g.db.events.delete_one({"_id": event_db.get("_id")})
+			db.client.events_collection.delete_one({"_id": event_db.get("_id")})
 			continue
 
 		response.events.events.append(event_msg)
 
 	response.contracts.server_time = time.time()
-	response.contracts.warning_message = "Contracts have not yet been implemented into NeoInc."
+	response.contracts.warning_message = "Contracts have not yet been implemented into NeoInc." # TODO: Contract implementation
 
 	return base64.b64encode(common.make_auth_message(response).SerializeToString())
+
+"""
+Simple daily gift info.
+"""
+@ei_bp.route('/daily_gift_info', methods=['POST'])
+def daily_gift_info():
+	response = ei_pb2.DailyGiftInfo()
+	response.current_day = int(time.strftime("%j", time.gmtime()))
+
+	midnight = time.mktime(time.strptime(time.strftime("%Y-%m-%d", time.gmtime()), "%Y-%m-%d"))
+	response.seconds_to_next_day = int(midnight + 86400 - time.time())
+
+	print(f"Seconds to next day: {response.seconds_to_next_day}")
+
+	return base64.b64encode(response.SerializeToString())

@@ -5,7 +5,7 @@ class Proxy:
 	def request(self, flow):
 		req = flow.request
 
-		# pass
+		# return
 		if req.host == 'www.auxbrain.com':
 			flow.request.scheme = 'http'
 			flow.request.host = 'localhost'

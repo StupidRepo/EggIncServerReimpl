@@ -1,3 +1,5 @@
+import time
+
 import consts
 from pb import ei_pb2
 
@@ -32,3 +34,17 @@ def make_afxconfig() -> ei_pb2.ArtifactsConfigurationResponse:
     afx_config.mission_parameters.extend(consts.MISSION_PARAMETERS)
 
     return afx_config
+
+
+def make_subscription() -> ei_pb2.UserSubscriptionInfo:
+    subscription = ei_pb2.UserSubscriptionInfo()
+    subscription.subscription_level = ei_pb2.UserSubscriptionInfo.Level.PRO
+    subscription.status = ei_pb2.UserSubscriptionInfo.Status.ACTIVE
+
+    subscription.first_subscribed = time.time() - 1000000
+    subscription.last_updated = time.time() - 200
+    subscription.period_end = time.time() + 1000000
+
+    subscription.auto_renew = False
+    subscription.platform = ei_pb2.Platform.DROID
+    return subscription
