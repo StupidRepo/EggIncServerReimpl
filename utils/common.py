@@ -5,8 +5,7 @@ from flask import request
 
 import consts
 from pb import ei_pb2
-from utils.hash import hash_v1
-
+from utils.hash import hash_v1, hash_v2
 
 def did_to_nid(input_id):
 	"""
@@ -32,9 +31,9 @@ def json_to_protobuf(json_data, proto_message):
 		else:
 			setattr(proto_message, key, value)
 
-def make_auth_message(proto_msg) -> ei_pb2.AuthenticatedMessage:
+def make_auth_message(proto_msg, use_v2: bool = False) -> ei_pb2.AuthenticatedMessage:
 	auth_msg = ei_pb2.AuthenticatedMessage()
-	auth_msg.code = hash_v1(proto_msg.SerializeToString())
+	auth_msg.code = hash_v2(proto_msg.SerializeToString()) if use_v2 else hash_v1(proto_msg.SerializeToString())
 	auth_msg.message = proto_msg.SerializeToString()
 
 	return auth_msg
@@ -54,8 +53,11 @@ def proto_parser(proto_class, is_auth=False):
 				proto_msg = ei_pb2.AuthenticatedMessage()
 				proto_msg.ParseFromString(decoded_data)
 
-				if proto_msg.code != hash_v1(proto_msg.message):
-					raise Exception("Something is wrong!")
+				exp = hash_v1(proto_msg.message)
+				expv2 = hash_v2(proto_msg.message)
+				if proto_msg.code != exp and proto_msg.code != expv2:
+					print("failed to verify hash :(")
+					raise Exception("could not verify hash!")
 
 				final_proto_msg.ParseFromString(proto_msg.message)
 			else:
