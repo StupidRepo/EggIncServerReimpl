@@ -9,5 +9,3 @@ if uri is None:
 
 client = MongoClient(uri)
 db = client.get_database("NeoInc")
-
-print("Database connected successfully!")

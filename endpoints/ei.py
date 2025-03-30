@@ -3,7 +3,7 @@ import time
 
 from flask import Blueprint, g
 from pb import ei_pb2
-from utils import common
+from utils import common, gen
 
 ei_bp = Blueprint('ei', __name__)
 
@@ -106,10 +106,10 @@ Get Egg, Inc. configuration data, such as a boost's golden egg cost, min soul eg
 """
 @ei_bp.route('/get_config', methods=['POST'])
 @common.proto_parser(ei_pb2.ConfigRequest)
-def get_config(msg: ei_pb2.ConfigRequest):
+def get_config(_: ei_pb2.ConfigRequest):
 	response = ei_pb2.ConfigResponse()
 
-	response.live_config.CopyFrom(common.make_liveconfig())
+	response.live_config.CopyFrom(gen.make_liveconfig())
 	response.mail_bag.mail.append(ei_pb2.InGameMail(
 		id="custom-server",
 		title="Custom Server",
@@ -127,7 +127,7 @@ Get the list of time-based things such as events, contracts, etc.
 """
 @ei_bp.route('/get_periodicals', methods=['POST'])
 @common.proto_parser(ei_pb2.GetPeriodicalsRequest)
-def get_periodicals(msg: ei_pb2.GetPeriodicalsRequest):
+def get_periodicals(_: ei_pb2.GetPeriodicalsRequest):
 	response = ei_pb2.PeriodicalsResponse()
 
 	events: list[dict] = g.db.events.find()
