@@ -6,4 +6,6 @@ test.py
 __pycache__
 .db
 .env
+
+# hi please don't publicise hashing.
 hash.py
