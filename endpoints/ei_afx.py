@@ -1,7 +1,7 @@
 import base64
-import time
 
-from flask import Blueprint, g
+from flask import Blueprint
+
 from pb import ei_pb2
 from utils import common, gen
 
