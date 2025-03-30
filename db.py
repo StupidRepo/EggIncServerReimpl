@@ -14,6 +14,7 @@ class MyDBClient(MongoClient):
 		self.db = self.get_database("NeoInc")
 		self.users_collection = self.db.get_collection("users")
 		self.events_collection = self.db.get_collection("events")
+		self.contracts_collection = self.db.get_collection("contracts")
 
 class DBUser:
 	def __init__(self, nid: str, database: MyDBClient):

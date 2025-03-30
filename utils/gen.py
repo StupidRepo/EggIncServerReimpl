@@ -35,7 +35,6 @@ def make_afxconfig() -> ei_pb2.ArtifactsConfigurationResponse:
 
     return afx_config
 
-
 def make_subscription() -> ei_pb2.UserSubscriptionInfo:
     subscription = ei_pb2.UserSubscriptionInfo()
     subscription.subscription_level = ei_pb2.UserSubscriptionInfo.Level.PRO
@@ -48,3 +47,54 @@ def make_subscription() -> ei_pb2.UserSubscriptionInfo:
     subscription.auto_renew = False
     subscription.platform = ei_pb2.Platform.DROID
     return subscription
+
+def make_gradespec(grade: ei_pb2.Contract.PlayerGrade, mult: float) -> ei_pb2.Contract.GradeSpec:
+    grade_spec = ei_pb2.Contract.GradeSpec()
+    grade_spec.grade = grade
+    grade_spec.goals.append(
+        ei_pb2.Contract.Goal(
+            type=ei_pb2.GoalType.EGGS_LAID,
+            target_amount=1337 * (mult * 0.5),
+
+            reward_type=ei_pb2.RewardType.PIGGY_FILL,
+            reward_amount=1234 * (mult * 0.75),
+        )
+    )
+
+    grade_spec.length_seconds = 120
+
+    return grade_spec
+
+def make_test_contract() -> ei_pb2.Contract:
+    contract = ei_pb2.Contract()
+
+    grade_unset = make_gradespec(ei_pb2.Contract.PlayerGrade.GRADE_UNSET, 1)
+    grade_c = make_gradespec(ei_pb2.Contract.PlayerGrade.GRADE_C, 2)
+    grade_b = make_gradespec(ei_pb2.Contract.PlayerGrade.GRADE_B, 2.25)
+
+    grade_a = make_gradespec(ei_pb2.Contract.PlayerGrade.GRADE_A, 2.3)
+    grade_aa = make_gradespec(ei_pb2.Contract.PlayerGrade.GRADE_AA, 2.5)
+    grade_aaa = make_gradespec(ei_pb2.Contract.PlayerGrade.GRADE_AAA, 2.55)
+    contract.grade_specs.append(grade_unset)
+    contract.grade_specs.append(grade_c)
+    contract.grade_specs.append(grade_b)
+
+    contract.grade_specs.append(grade_a)
+    contract.grade_specs.append(grade_aa)
+    contract.grade_specs.append(grade_aaa)
+
+    contract.start_time = 1743004800
+    contract.expiration_time = 1743609600
+    contract.length_seconds = 120
+
+    contract.chicken_run_cooldown_minutes = 2
+    contract.minutes_per_token = 1
+
+    contract.identifier = "test-contract"
+    contract.name = "Test Contract"
+    contract.description = "Hey!"
+
+    contract.leggacy = True
+    contract.debug = True
+
+    return contract

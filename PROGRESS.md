@@ -42,8 +42,8 @@
 ## `ei_afx/` - Artifacts
 ### Done
 - [x] ei_afx/config
-- [x] ei_afx/get_active_missions
-- [x] ei_afx/launch_mission
+- [x] ~~ei_afx/get_active_missions~~ **(disabled as code is very buggy, needs fixing)**
+- [x] ~~ei_afx/launch_mission~~ **(disabled as code is very buggy, needs fixing)**
 ### TODO
 None.
 ### PR only

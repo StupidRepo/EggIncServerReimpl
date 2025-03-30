@@ -1,6 +1,10 @@
 import base64
 import time
+from datetime import datetime, timedelta
+
 from flask import Blueprint, g
+from google.protobuf.json_format import ParseDict
+
 import db
 from pb import ei_pb2
 from utils import common, gen
@@ -133,6 +137,7 @@ Get the list of time-based things such as events, contracts, etc.
 @common.proto_parser(ei_pb2.GetPeriodicalsRequest)
 def get_periodicals(_: ei_pb2.GetPeriodicalsRequest):
 	response = ei_pb2.PeriodicalsResponse()
+	contracts = ei_pb2.ContractsResponse()
 
 	events: list[dict] = db.client.events_collection.find()
 	for event_db in events:
@@ -149,9 +154,18 @@ def get_periodicals(_: ei_pb2.GetPeriodicalsRequest):
 
 		response.events.events.append(event_msg)
 
-	response.contracts.server_time = time.time()
-	response.contracts.warning_message = "Contracts have not yet been implemented into NeoInc." # TODO: Contract implementation
+	contracts.server_time = time.time()
+	contracts.warning_message = "Contracts have not been fully implemented into NeoInc." # TODO: Contract implementation
 
+	# contracts_in_db: list[dict] = db.client.contracts_collection.find()
+	# for contract_db in contracts_in_db:
+	# 	cmsg: ei_pb2.Contract = ParseDict(contract_db, ei_pb2.Contract())
+	# 	cmsg.length_seconds = 120 # this would correspond to cmsg.grade_specs -> appropriate one for user's grade -> .length_seconds - for now we just set it to 120 seconds
+	#
+	# 	contracts.contracts.append(cmsg)
+	contracts.contracts.append(gen.make_test_contract())
+
+	response.contracts.CopyFrom(contracts)
 	return base64.b64encode(common.make_auth_message(response).SerializeToString())
 
 """
@@ -162,8 +176,8 @@ def daily_gift_info():
 	response = ei_pb2.DailyGiftInfo()
 	response.current_day = int(time.strftime("%j", time.gmtime()))
 
-	midnight = time.mktime(time.strptime(time.strftime("%Y-%m-%d", time.gmtime()), "%Y-%m-%d"))
-	response.seconds_to_next_day = int(midnight + 86400 - time.time())
+	midnight = datetime.combine(datetime.utcnow().date(), datetime.min.time())
+	response.seconds_to_next_day = int((midnight + timedelta(days=1) - datetime.utcnow()).total_seconds())
 
 	print(f"Seconds to next day: {response.seconds_to_next_day}")
 
