@@ -40,6 +40,12 @@ For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
 3. Make a `.env` with a `MONGO_URI`, which is the URI to your MongoDB database.
 4. Run the server with `go run ./src/`
 5. The server will be running on `localhost:5000`
+> [!NOTE]
+> The server will start without a MongoDB database, but a lot of endpoints will be disabled.
+
+> [!TIP]
+> You can use `docker compose up -d` to start a MongoDB database.
+> It will run on port 27017, and will store files in the `.db` folder.
 
 ### Connecting to the server
 You can make the game use this server by either:
