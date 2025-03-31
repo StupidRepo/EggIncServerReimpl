@@ -1,5 +1,5 @@
 # NeoInc
-An Egg, Inc. server re-implementation, made in Python.
+An Egg, Inc. server re-implementation, made in Go.
 
 > [!WARNING]
 > This is a fan project and is not intended to be used for cheating or hacking on official Egg, Inc. servers in any way.
@@ -11,15 +11,15 @@ For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
 
 - [ ] Basic login
   - [ ] Session handling
-  - [x] Actual account creation
-  - [x] Backup saving & loading
+  - [ ] Actual account creation
+  - [ ] Backup saving & loading
 
 - [ ] Configs
-  - [x] Regular (see `utils.make_liveconfig()`)
+  - [ ] Regular (see `utils.make_liveconfig()`)
   - [ ] Artifacts
 
 - [ ] Periodicals
-  - [x] Events
+  - [ ] Events
   - [ ] Missions
   - [ ] Contracts
   - [ ] Daily rewards
@@ -34,12 +34,13 @@ For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
 > [!WARNING]
 > To prevent abuse, the hashing algorithm has been .gitignore'd from this repository.
 > To see what you have to make to get this project to run, see the [README.md](/src/utils/README.md) in `utils/README.md`.
-
 ### Running the server
 1. Clone the repository
-2. Install the required dependencies with `pip` (`pip install Flask protobuf`)
-3. Make a `.env` with a `MONGO_URI` for MongoDB.
-4. Run the server with `python main.py`
+2. Install any required dependencies with `go mod tidy`
+3. Make a `.env` with a `MONGO_URI`, which is the URI to your MongoDB database.
+4. Run the server with `go run ./src/`
+5. The server will be running on `localhost:5000`
+
 ### Connecting to the server
 You can make the game use this server by either:
 - Modifying the game's code to use the server
@@ -52,6 +53,7 @@ You can make the game use this server by either:
 An NeoInc account uses a NID (NeoInc ID), which is slightly different from Egg, Inc.'s EID.
 The difference is how the ID is calculated (similar format, different code to produce an ID).
 
+<!--
 ## Events
 Events are in this format, in the `events` DB collection:
 ```json5
@@ -89,3 +91,4 @@ These are generic boost events. The multiplier is the boost multiplier. For exam
 - `mission-fuel`
 - `boost-duration`
 - `mission-duration`
+-->

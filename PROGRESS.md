@@ -1,11 +1,12 @@
 # Endpoint Progress
 ## `ei/` - Core
 ### Done
-- [x] ei/first_contact_secure
-- [x] ei/save_backup_secure
-- [x] ei/get_config
-- [x] ei/get_periodicals
+None.
 ### TODO
+- [ ] ei/first_contact_secure
+- [ ] ei/save_backup_secure
+- [ ] ei/get_config
+- [ ] ei/get_periodicals
 - [ ] ei/auto_join_coop
 - [ ] ei/clean_accounts
 - [ ] ei/clear_all_user_data
@@ -41,22 +42,22 @@
 
 ## `ei_afx/` - Artifacts
 ### Done
-- [x] ei_afx/config
-- [x] ~~ei_afx/get_active_missions~~ **(disabled as code is very buggy, needs fixing)**
-- [x] ~~ei_afx/launch_mission~~ **(disabled as code is very buggy, needs fixing)**
-### TODO
 None.
+### TODO
+- [ ] ei_afx/config
+- [ ] ~~ei_afx/get_active_missions~~ **(disabled as code is very buggy, needs fixing)**
+- [ ] ~~ei_afx/launch_mission~~ **(disabled as code is very buggy, needs fixing)**
 ### PR only
-- [ ] ~~ei_afx/authenticate_artifact~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/collect_contract_artifacts~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/collect_season_artifacts~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/complete_mission~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/consume_artifact~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/craft_artifact~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/demote_artifact~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/set_artifact~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/sync_mission~~ **(DIY and PR it in)**
-- [ ] ~~ei_afx/zoom_zoom~~ **(DIY and PR it in)**
+- [ ] ~~ei_afx/authenticate_artifact~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/collect_contract_artifacts~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/collect_season_artifacts~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/complete_mission~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/consume_artifact~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/craft_artifact~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/demote_artifact~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/set_artifact~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/sync_mission~~ **(DIY, and PR it in)**
+- [ ] ~~ei_afx/zoom_zoom~~ **(DIY, and PR it in)**
 
 ## `ei_ctx/` - Contracts
 ### Done
@@ -74,7 +75,8 @@ None.
 
 ## `ei_srv/` - Subscriptions
 ### Done
-- [x] ei_srv/subscription_status/<user_id>
+None.
 ### TODO
+- [ ] ei_srv/subscription_status/<user_id>
 - [ ] ei_srv/initialize_subscription
 - [ ] ei_srv/sub_change_hint
