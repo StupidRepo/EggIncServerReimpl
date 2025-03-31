@@ -33,7 +33,7 @@ For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
 ## Usage
 > [!WARNING]
 > To prevent abuse, the hashing algorithm has been .gitignore'd from this repository.
-> To see what you have to make to get this project to run, see the [README.md](/utils/README.md) in `utils/README.md`.
+> To see what you have to make to get this project to run, see the [README.md](/src/utils/README.md) in `utils/README.md`.
 
 ### Running the server
 1. Clone the repository

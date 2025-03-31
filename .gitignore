@@ -1,11 +1,14 @@
+# hi please don't publicise hashing.
+hash.go
+hash.py
+
+# files
 *.http
 *.bin
-test.py
+test.go
+
+# folders
 .venv
 .idea
-__pycache__
 .db
 .env
-
-# hi please don't publicise hashing.
-hash.py
