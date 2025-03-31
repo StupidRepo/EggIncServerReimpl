@@ -38,15 +38,17 @@ func MakeRouter(neoIncDB *database.NeoIncDB) *mux.Router {
 
 func main() {
 	var neoIncDB *database.NeoIncDB
+	dbURL := ""
+
 	// load env
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalln("Error loading .env file")
-	}
-
-	dbURL := os.Getenv("MONGO_URI")
-	if dbURL == "" {
-		log.Fatalln("MONGO_URI is not set!")
+		log.Println("Error loading .env file. Does it exist?")
+	} else {
+		dbURL = os.Getenv("MONGO_URI")
+		if dbURL == "" {
+			log.Println("MONGO_URI is not set!")
+		}
 	}
 
 	// connect to db
@@ -58,7 +60,7 @@ func main() {
 		}
 	}()
 	if err != nil {
-		log.Println("Failed to connect to MongoDB, some endpoints may not work:", err)
+		log.Println("Failed to create client:", err)
 	}
 
 	// ping for testing
@@ -68,7 +70,7 @@ func main() {
 	if client != nil {
 		err = client.Ping(ctx, readpref.Primary())
 		if err != nil {
-			log.Println("Failed to ping DB, some endpoints may not work:", err)
+			log.Println("Failed to ping DB, did you put in the correct URI?:", err)
 		} else {
 			// make db object if connection is successful
 			db := client.Database("NeoInc")
@@ -87,7 +89,10 @@ func main() {
 	// create router
 	r := MakeRouter(neoIncDB)
 
-	log.Println("Starting server on port 5000")
+	log.Println("Starting server on port 5000...")
+	if neoIncDB == nil {
+		log.Println("[WARNING] DBless mode: some endpoints may not work without a DB connection!")
+	}
 
 	// start server
 	err = http.ListenAndServe(":5000", r)
