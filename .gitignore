@@ -5,10 +5,10 @@ hash.py
 # files
 *.http
 *.bin
-test.go
 
 # folders
 .venv
 .idea
 .db
 .env
+src/test

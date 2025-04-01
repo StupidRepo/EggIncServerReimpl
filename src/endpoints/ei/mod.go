@@ -6,7 +6,5 @@ import (
 )
 
 func RegisterCoreEndpoints(r *mux.Router) {
-	r.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, core!"))
-	})
+	r.HandleFunc("/test", testHandler).Methods(http.MethodPost)
 }
