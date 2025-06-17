@@ -1,10 +1,9 @@
-# NeoInc
+# EggIncServerReimpl
 An Egg, Inc. server re-implementation, made in Go.
 
 > [!WARNING]
 > This is a fan project and is not intended to be used for cheating or hacking on official Egg, Inc. servers in any way.
 > It is intended to be used for educational purposes and for fun.
-> Switching from a NeoInc server to Egg, Inc. servers to save backups will not work. Do not try to get around this security measure.
 
 ## Implementation Status
 For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
@@ -54,10 +53,6 @@ You can make the game use this server by either:
 - Using `mitmproxy` and the mitmproxy script located in `proxy/mitmproxy.py`
   - You will need to do extra setup to get this to work on Android. Not sure about iOS.
   - Android users *may* need to install `mitmproxy`'s CA certificate as a system CA cert (which requires root).
-
-## Accounts
-An NeoInc account uses a NID (NeoInc ID), which is slightly different from Egg, Inc.'s EID.
-The difference is how the ID is calculated (similar format, different code to produce an ID).
 
 <!--
 ## Events
