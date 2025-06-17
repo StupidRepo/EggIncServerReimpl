@@ -1,14 +1,12 @@
-# hi please don't publicise hashing.
-hash.go
-hash.py
-
 # files
 *.http
 *.bin
+.env
+deno.lock
 
 # folders
-.venv
-.idea
-.db
-.env
-src/test
+.idea/
+.db/
+
+# hi please don't publicise hashing.
+hash.ts

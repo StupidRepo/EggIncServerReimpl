@@ -1,5 +1,5 @@
 # EggIncServerReimpl
-An Egg, Inc. server re-implementation, made in Go.
+An Egg, Inc. server re-implementation.
 
 > [!WARNING]
 > This is a fan project and is not intended to be used for cheating or hacking on official Egg, Inc. servers in any way.
@@ -35,9 +35,9 @@ For fine details, see the [PROGRESS.md](/PROGRESS.md) file.
 > To see what you have to make to get this project to run, see the [README.md](/src/utils/README.md) in `utils/README.md`.
 ### Running the server
 1. Clone the repository
-2. Install any required dependencies with `go mod tidy`
+2. Install any required dependencies with `deno i`
 3. Make a `.env` with a `MONGO_URI`, which is the URI to your MongoDB database.
-4. Run the server with `go run ./src/`
+4. Run the server with `deno run dev`
 5. The server will be running on `localhost:5000`
 > [!NOTE]
 > The server will start without a MongoDB database, but a lot of endpoints will be disabled.
