@@ -1,6 +1,7 @@
 syntax = "proto2";
 
 package ei;
+option go_package = "./src/pb";
 
 enum Platform {
     UNKNOWN_PLATFORM = 0;
