@@ -3,6 +3,7 @@
 *.bin
 .env
 deno.lock
+src/utils/hashing.ts
 
 # folders
 .idea/

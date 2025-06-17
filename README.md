@@ -71,7 +71,7 @@ Events are in this format, in the `events` DB collection:
 }
 ```
 
-They will be automatically deleted the next time `/ei/get_periodicals` is called and the event's seconds_remaining is 0.
+They will be automatically deleted the next time `/ei/get_periodicals` is called, providing the event's seconds_remaining is calculated to be 0.
 ### Sale event types
 The lower the multiplier, the higher the discount. For example, a 0.2 multiplier means 80% off. A 0.6 multiplier means 40% off.
 - `boost-sale`
